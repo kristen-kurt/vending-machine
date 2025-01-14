@@ -33,6 +33,13 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # Install NPM dependencies and build assets
 RUN npm install && npm run build
 
+# Create storage link and optimize
+RUN mkdir -p storage/app/public \
+    && php artisan storage:link \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
+
 # Generate application key
 RUN php artisan key:generate
 
